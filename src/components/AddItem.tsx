@@ -26,8 +26,19 @@ export class AddItem extends React.PureComponent<IAddItemProps, IAddItemState> {
   };
 
   private _addItem = (): void => {
+    if (this.state.inputText.length < 1) {
+      return;
+    }
     this.props.onAddItem(this.state.inputText);
     this.setState(() => ({ inputText: '' }));
+  };
+
+  private _keyShortCut = (event: any): void => {
+    if (event.key === 'Enter' || event.keyCode === 13 || event.which === 13) {
+      event.preventDefault();
+      event.stopPropagation();
+      this._addItem();
+    }
   };
 
   render(): JSX.Element {
@@ -41,6 +52,8 @@ export class AddItem extends React.PureComponent<IAddItemProps, IAddItemState> {
               id="text"
               value={this.state.inputText}
               onChange={this._updateValue}
+              onKeyPress={this._keyShortCut}
+              onKeyDown={this._keyShortCut}
               autoFocus={true}
             />
             <span className="input-group-btn">

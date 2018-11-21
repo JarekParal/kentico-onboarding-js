@@ -6,8 +6,6 @@ import { initialItems } from '../utils/store';
 import { Board } from '../containers/Board';
 import { app as reducer } from '../reducers/app';
 
-const store = createStore(reducer, initialItems);
-
 describe('shortcuts', () => {
   let wrapper: any;
   const uniqueInputText: string = 'hello, how are you?';
@@ -22,6 +20,7 @@ describe('shortcuts', () => {
   };
 
   beforeEach(() => {
+    const store = createStore(reducer, initialItems);
     wrapper = mount(<Provider store={store}><Board /></Provider>);
   });
 
@@ -43,7 +42,20 @@ describe('shortcuts', () => {
     expect(wrapper.contains(uniqueInputText)).toBeTruthy();
   });
 
-  it('put text to input and press Enter', () => {
+  it('put text to input and press Enter - keyPress', () => {
+    putTextToInputForm(wrapper, uniqueInputText);
+    const inputForm = wrapper.find('.form-control');
+
+    inputForm.simulate('keyPress', {
+      key: 'Enter',
+      keyCode: 13,
+      which: 13,
+    });
+
+    expect(wrapper.contains(uniqueInputText)).toBeTruthy();
+  });
+
+  it('put text to input and press Enter - keyDown', () => {
     putTextToInputForm(wrapper, uniqueInputText);
     const inputForm = wrapper.find('.form-control');
 
